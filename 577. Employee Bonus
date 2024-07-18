@@ -1,0 +1,5 @@
+Select name, bonus 
+from Employee
+left join Bonus
+using(empID)
+where bonus >= 1000 is not TRUE;
