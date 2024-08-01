@@ -1,0 +1,15 @@
+with first_year_cal as(
+    select
+    product_id,
+    min(year) as 'Year'
+    from Sales
+    group by 1
+)
+
+select 
+     product_id, 
+     Year as 'first_year', 
+     quantity,
+     price
+from Sales
+where (product_id, Year) in (select * from first_year_cal)
