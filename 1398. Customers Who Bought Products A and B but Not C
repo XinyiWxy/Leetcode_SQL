@@ -1,0 +1,12 @@
+with mid_data as(
+    select Orders.customer_id as target_id
+    from Orders
+    group by Orders.customer_id 
+    having  sum(if(Orders.product_name = 'A',1,0))> 0
+    and sum(if(Orders.product_name = 'B',1,0)) > 0 
+    and sum(if(Orders.product_name = 'C',1,0)) = 0 )
+
+select c1.customer_id, c1.customer_name 
+from Customers c1
+inner join mid_data m1
+where c1.customer_id = m1.target_id
