@@ -1,3 +1,16 @@
+select c1.customer_id, c1.customer_name
+from Customers c1
+inner join Orders o1
+on c1.customer_id = o1.customer_id
+group by o1.customer_id 
+having sum(o1.product_name  = 'A') > 0
+    and sum(o1.product_name  = 'B') > 0 
+    and sum(o1.product_name  = 'C') = 0 
+
+
+
+
+
 with mid_data as(
     select Orders.customer_id as target_id
     from Orders
