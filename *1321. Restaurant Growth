@@ -1,0 +1,22 @@
+SELECT visited_on,amount,round(average_amount,2)average_amount
+from 
+	(select 
+		visited_on, 
+	 sum(amount) over (order by visited_on rows 6 preceding) amount,
+	 avg(amount) over (order by visited_on rows 6 preceding) average_amount
+	from (select visited_on, sum(amount) amount from Customer GROUP BY visited_on) a
+	) b
+where DATEDIFF(visited_on,(SELECT min(visited_on) from Customer)) >= 6;
+
+
+
+
+SELECT x.visited_on AS visited_on, SUM(y.day_sum) AS amount,
+       ROUND(AVG(y.day_sum), 2) AS average_amount
+FROM
+  (SELECT visited_on, SUM(amount) AS day_sum FROM Customer GROUP BY visited_on ) x,
+  (SELECT visited_on, SUM(amount) AS day_sum FROM Customer GROUP BY visited_on ) y
+WHERE DATEDIFF(x.visited_on, y.visited_on) BETWEEN 0 AND 6
+GROUP BY x.visited_on
+HAVING COUNT(y.visited_on) = 7
+order by x.visited_on;
